@@ -46,22 +46,33 @@ class App extends Component {
     event.preventDefault();
     const project = this.projectName.value;
     console.log(project);
-    base.push(`/users/${this.state.user.uid}/projects`, { data: project })
+    base.push(`/users/${this.state.user.displayName}/projects`, { data: project })
+  }
+
+  addUserNameToFirebase (event) {
+    event.preventDefault();
+    const name = this.userName.value;
+    base.push(`/users/${this.state.user.displayName}/userName`, {data: name})
   }
 
   formIfLoggedIn () {
     if (this.state.user.uid) {
       return (
+        <div>
         <form onSubmit={ this.addProjectToFirebase.bind(this)}>
           <input
             placeholder='Favorit GitHub Projects'
             ref={ element => this.projectName = element} />
           <button>Add to Firebase</button>
+        </form>
+
+        <form onSubmit={ this.addUserNameToFirebase.bind(this)}>
           <input
           placeholder='GitHub users'
-          ref={ element => this.user = element} />
+          ref={ element => this.userName = element } />
           <button>Add User</button>
         </form>
+        </div>
       )
     }
   }
