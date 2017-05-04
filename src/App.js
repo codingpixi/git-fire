@@ -90,15 +90,27 @@ class App extends Component {
   }
 
   displayMyShit () {
-    console.log(this.state.projects);
+    // console.log(this.state.projects);
     if (this.state.user.uid)
       return (
         <div>
-        {this.state.projects.map((arr, index) => {
-          return (
-            <li key={index}>{arr}</li>
-          )}
-        )}
+          <div>
+            <h3>Projects</h3>
+            {this.state.projects.map((project, index) => {
+              return (
+                <li key={index}>{project}</li>
+              )}
+            )}
+          </div>
+
+          <div>
+            <h3>Users</h3>
+            {this.state.users.map((arr, index) => {
+              return (
+                <li key={index}>{arr}</li>
+              )}
+            )}
+          </div>
         </div>
       )
   }
@@ -119,6 +131,9 @@ class App extends Component {
       asArray: true
     }).then(data => {
       // console.log(data);
+      this.setState({
+        users:data
+      })
     })
   }
 
