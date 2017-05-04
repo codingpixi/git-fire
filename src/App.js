@@ -11,8 +11,19 @@ class App extends Component {
   constructor () {
     super();
     this.state = {
-      user: {}
+      user: {},
+      projects: [],
+      users: []
     }
+  }
+
+  componentDidMount () {
+    // this.getGitHubInfo()
+    base.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.getGitHubInfo()
+      }
+    })
   }
 
   login () {
@@ -52,6 +63,7 @@ class App extends Component {
   addUserNameToFirebase (event) {
     event.preventDefault();
     const name = this.userName.value;
+    console.log(name);
     base.push(`/users/${this.state.user.displayName}/userName`, {data: name})
   }
 
@@ -61,20 +73,53 @@ class App extends Component {
         <div>
         <form onSubmit={ this.addProjectToFirebase.bind(this)}>
           <input
-            placeholder='Favorit GitHub Projects'
+            placeholder='Favorite GitHub Projects'
             ref={ element => this.projectName = element} />
           <button>Add to Firebase</button>
         </form>
 
         <form onSubmit={ this.addUserNameToFirebase.bind(this)}>
           <input
-          placeholder='GitHub users'
+          placeholder='Add GitHub User'
           ref={ element => this.userName = element } />
           <button>Add User</button>
         </form>
         </div>
       )
     }
+  }
+
+  displayMyShit () {
+    console.log(this.state.projects);
+    if (this.state.user.uid)
+      return (
+        <div>
+        {this.state.projects.map((arr, index) => {
+          return (
+            <li key={index}>{arr}</li>
+          )}
+        )}
+        </div>
+      )
+  }
+
+  getGitHubInfo(){
+    // console.log('moto');
+    base.fetch(`/users/${this.state.user.displayName}/projects`, {
+      context: this,
+      asArray: true
+    }).then(data => {
+      // console.log(data);
+      this.setState({
+        projects:data
+      })
+    })
+    base.fetch(`/users/${this.state.user.displayName}/userName`, {
+      context: this,
+      asArray: true
+    }).then(data => {
+      // console.log(data);
+    })
   }
 
   render() {
@@ -88,6 +133,9 @@ class App extends Component {
           {this.loginOrLogoutButton()}
         </p>
         {this.formIfLoggedIn()}
+        <hr />
+        {this.displayMyShit()}
+        {/* {this.getGitHubInfo()} */}
       </div>
     );
   }
