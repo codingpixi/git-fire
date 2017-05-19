@@ -26,10 +26,7 @@ class ProjectSearchResult extends Component {
     return (
       <li>
         <a href={project.html_url} target="_blank"><strong style={{cursor: 'pointer'}}>{project.name}</strong></a>
-        <Link to={`/MoreInfo/${project.id}`}>
-        <div>
-          <a href="{project.id}">More Info</a>
-        </div>
+        <Link to={`/MoreInfo/${project.id}`}>More Info
         </Link>
         <p>{project.stargazers_count}</p>
         <p>{project.description}</p>
